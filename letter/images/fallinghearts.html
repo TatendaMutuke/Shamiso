@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Secret Love Letter</title>
+  <!-- Handwritten fonts from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pacifico&display=swap" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+        integrity="sha512-p8i3c6+OllLfzueR6SJd9qqvJtjJlnZ3fwpryjBh6SOr3H/I8qYB1FQlYGH+VxAnZwHBM5cYPY5Nqe2ejbkf2w==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* Enhanced Animated Background */
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #FFDEE9, #B5FFFC);
+      background-size: 400% 400%;
+      animation: gradientAnimation 15s ease infinite;
+      font-family: 'Pacifico', cursive;
+      color: #333;
+      overflow-x: hidden;
+      position: relative;
+    }
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    /* Falling Hearts Animation */
+    .falling-hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0% {
+        transform: translateY(-50px);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+    /* Envelope Animation Styles */
+    #envelopeContainer {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      margin: 100px auto;
+      cursor: pointer;
+    }
+    .envelope {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .envelope .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: #fff;
+      border-bottom: 2px solid #ccc;
+      transform-origin: top center;
+      transition: transform 1s ease;
+    }
+    .envelope.open .flap {
+      transform: rotateX(180deg);
+    }
+    .envelope .letter-preview {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 50%;
+      background: #fdfdfd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Great Vibes', cursive;
+      font-size: 24px;
+      color: #ff3366;
+    }
+    /* Hidden Love Letter Content */
+    #loveLetterContent {
+      display: none;
+      animation: fadeIn 1.5s ease forwards;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    /* Dating Counter Styles */
+    #datingCounter {
+      font-family: 'Pacifico', cursive;
+      font-size: 20px;
+      color: #ff3366;
+      margin: 10px 0;
+    }
+    /* Letter Section Styles */
+    #letterSection {
+      text-align: left;
+      margin-top: 20px;
+    }
+    .letterParagraph {
+      font-family: 'Great Vibes', cursive;
+      font-size: 24px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      overflow: hidden;
+      border-right: 2px solid #333;
+      margin: 20px auto;
+      max-width: 90%;
+      min-height: 30px;
+    }
+    .message-icon {
+      font-size: 32px;
+      color: #ff3366;
+      margin: 10px auto;
+      display: block;
+      text-align: center;
+    }
+    /* Card Styles for Images */
+    .card {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 1s ease-in;
+      /* Temporary debug border: remove once confirmed */
+      border: 2px dashed red;
+    }
+    .card.visible {
+      opacity: 1;
+    }
+    .card img {
+      width: 100%;
+      display: block;
+    }
+    /* Hide the music player controls */
+    #bgMusic {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Falling Hearts Background -->
+  <div class="falling-hearts">
+    <div class="heart" style="left: 10%; animation-duration: 8s; animation-delay: 0s;">❤️</div>
+    <div class="heart" style="left: 25%; animation-duration: 9s; animation-delay: 1s;">❤️</div>
+    <div class="heart" style="left: 40%; animation-duration: 7s; animation-delay: 2s;">❤️</div>
+    <div class="heart" style="left: 55%; animation-duration: 10s; animation-delay: 3s;">❤️</div>
+    <div class="heart" style="left: 70%; animation-duration: 8.5s; animation-delay: 0.5s;">❤️</div>
+    <div class="heart" style="left: 85%; animation-duration: 9.5s; animation-delay: 1.5s;">❤️</div>
+    <div class="heart" style="left: 15%; animation-duration: 8.2s; animation-delay: 2.2s;">❤️</div>
+    <div class="heart" style="left: 35%; animation-duration: 9.8s; animation-delay: 3.3s;">❤️</div>
+    <div class="heart" style="left: 60%; animation-duration: 8.6s; animation-delay: 1.8s;">❤️</div>
+    <div class="heart" style="left: 80%; animation-duration: 10.2s; animation-delay: 2.5s;">❤️</div>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <div class="container">
+    <!-- Envelope Animation -->
+    <div id="envelopeContainer">
+      <div class="envelope" id="envelope">
+        <div class="flap"></div>
+        <div class="letter-preview">Open Me</div>
+      </div>
+    </div>
+
+    <!-- Hidden Love Letter Content -->
+    <div id="loveLetterContent" class="container">
+      <h1 style="font-family: 'Great Vibes', cursive; font-size: 48px; color: #ff3366;">
+        My Love Letter for You
+      </h1>
+      <!-- Dating Counter -->
+      <div id="datingCounter"></div>
+      <div id="letterSection"></div>
+    </div>
+  </div>
+
+  <script>
+    // Function to start background music upon user interaction
+    function playMusic() {
+      var music = document.getElementById('bgMusic');
+      if (music.paused) {
+        music.play();
+      }
+    }
+
+    // When the envelope is clicked, play music and animate the envelope opening.
+    document.getElementById('envelopeContainer').addEventListener('click', function () {
+      playMusic();
+      var envelope = document.getElementById('envelope');
+      envelope.classList.add('open');
+      // Wait for the flap animation before showing the letter content
+      setTimeout(function () {
+        document.getElementById('envelopeContainer').style.display = 'none';
+        document.getElementById('loveLetterContent').style.display = 'block';
+        typeParagraph(0);
+      }, 1000);
+    });
+
+    // Dating Counter - Counts time since June 03, 2024 continuously.
+    function updateDatingCounter() {
+      var startDate = new Date("June 03, 2024 00:00:00");
+      var now = new Date();
+      
+      // Calculate differences in each unit:
+      var years = now.getFullYear() - startDate.getFullYear();
+      var months = now.getMonth() - startDate.getMonth();
+      var days = now.getDate() - startDate.getDate();
+      var hours = now.getHours() - startDate.getHours();
+      var minutes = now.getMinutes() - startDate.getMinutes();
+      var seconds = now.getSeconds() - startDate.getSeconds();
+      
+      // Adjust if any unit is negative
+      if (seconds < 0) {
+        seconds += 60;
+        minutes--;
+      }
+      if (minutes < 0) {
+        minutes += 60;
+        hours--;
+      }
+      if (hours < 0) {
+        hours += 24;
+        days--;
+      }
+      if (days < 0) {
+        // Get days in the previous month
+        var previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += previousMonth.getDate();
+        months--;
+      }
+      if (months < 0) {
+        months += 12;
+        years--;
+      }
+      
+      document.getElementById("datingCounter").innerHTML = 
+        "We've been together for " + years + " years, " + months + " months, " + days + " days, " +
+        hours + " hours, " + minutes + " minutes, " + seconds + " seconds.";
+    }
+    setInterval(updateDatingCounter, 1000);
+    updateDatingCounter();
+
+    // Define your paragraphs, icons, and local images
+    var paragraphs = [
+      "Dear My Dearest Shamiso,",
+      "From the moment our paths crossed, you have brought a light into my life that I never knew existed. Your smile and laughter fill my days with endless joy.",
+      "Every shared moment, every whisper of your love, has woven a tapestry of memories that I cherish dearly.",
+      "I often find myself lost in the magic of your eyes, where dreams and hopes intertwine, painting our future with vibrant colors.",
+      "You are not only my love, but also my best friend and confidant—the one who makes my world complete.",
+      "In your embrace, every challenge fades away and every sunrise becomes a promise of a new beginning.",
+      "I promise to stand by you, laugh with you, and create a lifetime of beautiful memories together.",
+      "Forever and always, with all my heart,",
+      "Tatenda"
+    ];
+    var icons = [
+      "fa-solid fa-envelope-open-text",
+      "fa-solid fa-heart",
+      "fa-solid fa-book-open",
+      "fa-solid fa-eye",
+      "fa-solid fa-users",
+      "fa-solid fa-sun",
+      "fa-solid fa-handshake",
+      "fa-solid fa-infinity",
+      "fa-solid fa-signature"
+    ];
+    var images = [
+      "images/Shasha.jpg",
+      "images/Shamiso.jpg",
+      "images/Shamiso1.jpg",
+      "images/Shamiso3.jpg",
+      "images/Shamiso4.jpg",
+      "images/Shamiso5.jpg",
+      "images/Shamiso6.jpg",
+      "images/Shamiso7.jpg",
+      "images/Shasha2.jpg"
+    ];
+
+    var speed = 50; // Typing speed in milliseconds
+
+    // Function to type out text one character at a time
+    function typeText(element, text, callback) {
+      let charIndex = 0;
+      function typeCharacter() {
+        if (charIndex < text.length) {
+          element.innerHTML += text.charAt(charIndex);
+          charIndex++;
+          setTimeout(typeCharacter, speed);
+        } else {
+          if (callback) callback();
+        }
+      }
+      typeCharacter();
+    }
+
+    // Function to type out each paragraph, add an icon, then display the corresponding memory image in a card
+    function typeParagraph(index) {
+      if (index >= paragraphs.length) return; // End if no more paragraphs
+      var letterSection = document.getElementById('letterSection');
+
+      // Create and append a new paragraph element
+      var p = document.createElement('p');
+      p.className = 'letterParagraph';
+      letterSection.appendChild(p);
+
+      // Type out the paragraph text
+      typeText(p, paragraphs[index], function() {
+        // After finishing the paragraph, add a decorative icon if available
+        if (icons[index]) {
+          var iconEl = document.createElement('i');
+          iconEl.className = 'message-icon ' + icons[index];
+          letterSection.appendChild(iconEl);
+        }
+        // After a short delay, display the corresponding memory image as a card if available
+        if (images[index]) {
+          setTimeout(function() {
+            // Create a card container for the image
+            var card = document.createElement('div');
+            card.className = 'card';
+            // Create the image element
+            var img = document.createElement('img');
+            img.src = images[index];
+            img.alt = 'Memory Image';
+            card.appendChild(img);
+            letterSection.appendChild(card);
+            // Trigger fade in for the card
+            setTimeout(function(){
+              card.classList.add('visible');
+            }, 100);
+            // Wait a moment before moving to the next paragraph
+            setTimeout(function() {
+              typeParagraph(index + 1);
+            }, 1500);
+          }, 500);
+        } else {
+          setTimeout(function() {
+            typeParagraph(index + 1);
+          }, 500);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
